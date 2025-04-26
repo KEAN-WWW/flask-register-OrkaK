@@ -9,10 +9,12 @@ db = SQLAlchemy()
 class User(db.Model):
     """User Model"""
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128))
-    password = db.Column(db.String(128))
+    username = db.Column(db.String(64), nullable=False)  # <<< ADD THIS
+    email = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, email, password):
+    def __init__(self, username, email, password):
+        self.username = username
         self.email = email
         self.password = password
 
