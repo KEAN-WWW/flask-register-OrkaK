@@ -6,7 +6,7 @@ authentication = Blueprint('authentication', __name__, template_folder='template
 
 @authentication.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    return redirect(url_for('authentication.dashboard'))
 
 @authentication.route('/registration', methods=['POST', 'GET'])
 def registration():
