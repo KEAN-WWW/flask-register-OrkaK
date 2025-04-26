@@ -6,20 +6,24 @@ authentication = Blueprint('authentication', __name__, template_folder='template
 
 @authentication.route('/dashboard')
 def dashboard():
-    return redirect(url_for('authentication.dashboard'))
+    return render_template('dashboard.html')
 
 @authentication.route('/registration', methods=['POST', 'GET'])
 def registration():
     form = RegisterForm()
     if form.validate_on_submit():
-        new_user = User(
-            username=form.username.data,
+        existing_user = User.query.filter_by(email=form.email.data).first()
+        if existing_user:
+            flash("Already Registered", "danger")
+            return redirect(url_for('authentication.registration'))
+
+        new_user = User( 
             email=form.email.data,
-            password=form.password.data  # (Important: in real apps, hash passwords!)
+            password=form.password.data
         )
         db.session.add(new_user)
         db.session.commit()
         flash("Registration successful!", "success")
         return redirect(url_for('authentication.dashboard'))
-    
+
     return render_template('registration.html', form=form)
